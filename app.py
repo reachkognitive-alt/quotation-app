@@ -162,9 +162,25 @@ with st.expander("👤 Customer Details", expanded=True):
 st.markdown("---")
 st.subheader("🔎 Product Configuration")
 
+
+def get_product_name(index_loc):
+    base_product_name = "KOG "
+    row = df.iloc[index_loc]
+    switches,fans,sockets,dimmers= row.get("switches"), row.get("fan_modules"), row.get("sockets"), row.get("dimmers")
+    if switches>0:
+        base_product_name = base_product_name +"S"+ str(switches)
+    if fans>0:
+        base_product_name = base_product_name +"F"+ str(fans)
+    if sockets>0:
+        base_product_name = base_product_name +"P"+ str(sockets)
+    if dimmers>0:
+        base_product_name = base_product_name +"D"+ str(dimmers)
+    return base_product_name
+
 sheet = st.selectbox("Select Series / Sheet", list(products.keys()))
 df = products[sheet]
-
+for i1 in range(len(df)):
+    df['product_name'][i1] = get_product_name(i1)
 # -----------------------------------------------------
 # STRUCTURE VALIDATION
 # -----------------------------------------------------
@@ -323,11 +339,12 @@ if st.button("Add to Cart"):
     else:
         st.warning("Please select a product.")
         st.stop()
-
+    
+ 
     st.session_state.cart.append({
         "sno": len(st.session_state.cart) + 1,
-        "product": final_row.get("product_name", ""),
-        "desc": final_row.get("description", ""),
+        "product": final_row.get("product_name",""),
+        "desc": final_row.get("product_description", ""),
         "placement": placement,
         "qty": qty,
         "unit_price": float(final_row.get("mrp", 0)),   # ✅ use only this
