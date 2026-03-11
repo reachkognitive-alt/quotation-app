@@ -166,7 +166,11 @@ st.subheader("🔎 Product Configuration")
 def get_product_name(index_loc):
     base_product_name = "KOG "
     row = df.iloc[index_loc]
-    switches,fans,sockets,dimmers= row.get("switches"), row.get("fan_modules"), row.get("sockets"), row.get("dimmers")
+    # switches,fans,sockets,dimmers= row.get("switches"), row.get("fan_modules"), row.get("sockets"), row.get("dimmers")
+    switches = row.get("switches",0) or 0
+    fans = row.get("fan_modules",0) or 0
+    sockets = row.get("sockets",0) or 0
+    dimmers = row.get("dimmers",0) or 0
     if switches>0:
         base_product_name = base_product_name +"S"+ str(switches)
     if fans>0:
